@@ -26,7 +26,7 @@ class AuthService
             'email'         => strtolower(trim($data['email'])),
             'phone'         => trim($data['phone']),
             'password_hash' => $passwordHash,
-            'role'          => 'user',
+            'role'          => 'member',
             'status'        => 'active',
             'province'      => $data['province'] ?? null,
             'city'          => $data['city'] ?? null,

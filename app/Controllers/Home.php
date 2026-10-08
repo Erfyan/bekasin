@@ -39,8 +39,8 @@ class Home extends BaseController
             ->findAll(8);
 
         $data = [
-            'title'           => 'Bekasin-Aja — Marketplace Barang Bekas C2C Terpercaya di Indonesia',
-            'metaDescription' => 'Barang Lama, Manfaat Baru. Jual beli barang bekas berkualitas, aman, dan mudah langsung dengan pemiliknya.',
+            'title'           => 'Bekasin — Marketplace Barang Bekas',
+            'metaDescription' => 'Jual beli barang bekas berkualitas, aman, dan mudah langsung antar pengguna.',
             'categories'      => $categories,
             'latestProducts'  => $latestProducts,
             'popularProducts' => $popularProducts,

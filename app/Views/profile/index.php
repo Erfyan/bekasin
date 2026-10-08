@@ -38,12 +38,20 @@
                     </div>
 
                     <!-- Actions -->
-                    <div class="flex items-center gap-2.5">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <?php if (session()->get('role') === 'admin'): ?>
+                            <a href="<?= base_url('admin') ?>" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
+                            </a>
+                        <?php endif; ?>
                         <a href="<?= base_url('sellers/' . $user['username']) ?>" target="_blank" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all flex items-center gap-1.5">
                             <i data-lucide="external-link" class="w-4 h-4"></i> Lihat Toko Publik
                         </a>
                         <a href="<?= base_url('profile/settings') ?>" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5">
                             <i data-lucide="settings" class="w-4 h-4"></i> Edit Profil
+                        </a>
+                        <a href="<?= base_url('logout') ?>" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-semibold text-xs rounded-xl transition-all flex items-center gap-1.5">
+                            <i data-lucide="log-out" class="w-4 h-4"></i> Logout
                         </a>
                     </div>
                 </div>

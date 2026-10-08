@@ -67,13 +67,10 @@
                 <i data-lucide="external-link" class="w-4 h-4"></i>
                 <span>Buka Marketplace ↗</span>
             </a>
-            <form action="<?= base_url('logout') ?>" method="POST">
-                <?= csrf_field() ?>
-                <button type="submit" class="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-rose-400 hover:text-rose-300 rounded-lg hover:bg-rose-500/10 transition-colors">
-                    <i data-lucide="log-out" class="w-4 h-4"></i>
-                    <span>Keluar (Logout)</span>
-                </button>
-            </form>
+            <a href="<?= base_url('logout') ?>" class="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-rose-400 hover:text-rose-300 rounded-lg hover:bg-rose-500/10 transition-colors">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                <span>Keluar (Logout)</span>
+            </a>
         </div>
     </aside>
 
@@ -93,8 +90,12 @@
                     <span class="text-[10px] text-emerald-400 uppercase font-bold tracking-wider">Super Administrator</span>
                 </div>
                 <div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/30">
-                    A
+                    <?= strtoupper(substr(session()->get('full_name') ?? 'A', 0, 1)) ?>
                 </div>
+                <a href="<?= base_url('logout') ?>" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 rounded-xl border border-rose-500/30 transition-all ml-1" title="Keluar dari Admin Panel">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Logout</span>
+                </a>
             </div>
         </header>
 

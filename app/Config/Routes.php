@@ -28,7 +28,7 @@ $routes->group('', ['filter' => 'guest'], static function ($routes) {
     $routes->post('/register', 'Auth::attemptRegister');
 });
 
-$routes->post('/logout', 'Auth::logout', ['filter' => 'auth']);
+$routes->match(['get', 'post'], '/logout', 'Auth::logout', ['filter' => 'auth']);
 
 // ==========================================
 // 3. RUTE MEMBER (Wajib Login - Buyer & Seller)

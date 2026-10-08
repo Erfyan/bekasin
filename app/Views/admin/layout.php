@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-900">
+<html lang="id" class="h-full bg-slate-950">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +13,79 @@
 </head>
 <body class="flex min-h-full font-sans antialiased text-slate-100 selection:bg-emerald-500 selection:text-white bg-slate-950">
 
+    <!-- Mobile Drawer Backdrop -->
+    <div id="admin-drawer-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 hidden md:hidden transition-opacity"></div>
+
+    <!-- Mobile Sidebar Drawer -->
+    <aside id="admin-drawer" class="fixed inset-y-0 left-0 w-72 bg-slate-900 border-r border-slate-800 z-50 flex flex-col justify-between -translate-x-full md:hidden transition-transform duration-300 ease-in-out shadow-2xl">
+        <div>
+            <!-- Drawer Brand & Close Button -->
+            <div class="h-16 flex items-center justify-between px-6 border-b border-slate-800">
+                <a href="<?= base_url('admin') ?>" class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white font-bold shadow-md">
+                        <i data-lucide="shield" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <span class="text-base font-extrabold tracking-tight text-white">Admin Panel</span>
+                        <span class="block text-[9px] text-emerald-400 font-bold uppercase tracking-wider -mt-1">Bekasin-Aja</span>
+                    </div>
+                </a>
+                <button id="admin-drawer-close" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1 text-sm font-medium">
+                <a href="<?= base_url('admin') ?>" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 text-emerald-400"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="<?= base_url('admin/products') ?>" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="package" class="w-4 h-4 text-teal-400"></i>
+                    <span>Moderasi Barang</span>
+                </a>
+                <a href="<?= base_url('admin/users') ?>" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="users" class="w-4 h-4 text-blue-400"></i>
+                    <span>Pengguna</span>
+                </a>
+                <a href="<?= base_url('admin/categories') ?>" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="tags" class="w-4 h-4 text-purple-400"></i>
+                    <span>Kategori</span>
+                </a>
+                <a href="<?= base_url('admin/transactions') ?>" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i>
+                    <span>Transaksi</span>
+                </a>
+                <a href="<?= base_url('admin/reports') ?>" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
+                    <span>Laporan Aduan</span>
+                </a>
+                <a href="<?= base_url('admin/audit-logs') ?>" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="scroll-text" class="w-4 h-4 text-amber-400"></i>
+                    <span>Audit Log</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Back to Marketplace & Logout (Mobile Drawer) -->
+        <div class="p-4 border-t border-slate-800 space-y-2">
+            <a href="<?= base_url('/') ?>" target="_blank" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-400 hover:text-emerald-400 rounded-lg hover:bg-slate-800/60 transition-colors">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+                <span>Buka Marketplace ↗</span>
+            </a>
+            <a href="<?= base_url('logout') ?>" class="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-rose-400 hover:text-rose-300 rounded-lg hover:bg-rose-500/10 transition-colors">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                <span>Keluar (Logout)</span>
+            </a>
+        </div>
+    </aside>
+
     <!-- Sidebar Desktop -->
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 hidden md:flex min-h-screen">
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 hidden md:flex min-h-screen sticky top-0 h-screen">
         <div>
             <!-- Brand -->
-            <div class="h-18 flex items-center px-6 border-b border-slate-800">
+            <div class="h-16 flex items-center px-6 border-b border-slate-800">
                 <a href="<?= base_url('admin') ?>" class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white font-bold shadow-md">
                         <i data-lucide="shield" class="w-4 h-4"></i>
@@ -62,7 +130,7 @@
             </nav>
         </div>
 
-        <!-- Back to Marketplace & Logout -->
+        <!-- Back to Marketplace & Logout (Desktop) -->
         <div class="p-4 border-t border-slate-800 space-y-2">
             <a href="<?= base_url('/') ?>" target="_blank" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-400 hover:text-emerald-400 rounded-lg hover:bg-slate-800/60 transition-colors">
                 <i data-lucide="external-link" class="w-4 h-4"></i>
@@ -78,19 +146,23 @@
     <!-- Main Admin Content Area -->
     <div class="flex-1 flex flex-col min-w-0">
         <!-- Top Navbar -->
-        <header class="h-18 bg-slate-900/80 backdrop-blur border-b border-slate-800 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+        <header class="h-16 bg-slate-900/90 backdrop-blur border-b border-slate-800 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
             <div class="flex items-center gap-3">
-                <a href="<?= base_url('admin') ?>" class="md:hidden flex items-center gap-2">
-                    <span class="font-extrabold text-white text-sm">Bekasin-Aja Admin</span>
+                <!-- Hamburger Button (Mobile Only) -->
+                <button id="admin-drawer-open" class="p-2 -ml-1 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl md:hidden">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <a href="<?= base_url('admin') ?>" class="flex items-center gap-2 md:hidden">
+                    <span class="font-bold text-white text-sm">Bekasin Admin</span>
                 </a>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <div class="text-right hidden sm:block">
-                    <span class="text-xs font-bold text-white block"><?= esc(session()->get('full_name')) ?></span>
+                    <span class="text-xs font-bold text-white block truncate max-w-[150px]"><?= esc(session()->get('full_name')) ?></span>
                     <span class="text-[10px] text-emerald-400 uppercase font-bold tracking-wider">Super Administrator</span>
                 </div>
-                <div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/30">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs sm:text-sm border border-emerald-500/30 shrink-0">
                     <?= strtoupper(substr(session()->get('full_name') ?? 'A', 0, 1)) ?>
                 </div>
                 <a href="<?= base_url('logout') ?>" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 rounded-xl border border-rose-500/30 transition-all ml-1" title="Keluar dari Admin Panel">
@@ -116,16 +188,41 @@
         <?php endif; ?>
 
         <!-- Page Section Body -->
-        <main class="flex-1 p-4 sm:p-8 bg-slate-950">
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 bg-slate-950 overflow-x-hidden">
             <?= $this->renderSection('content') ?>
         </main>
     </div>
 
+    <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
+
+            // Mobile Drawer Toggle
+            const drawer = document.getElementById('admin-drawer');
+            const backdrop = document.getElementById('admin-drawer-backdrop');
+            const openBtn = document.getElementById('admin-drawer-open');
+            const closeBtn = document.getElementById('admin-drawer-close');
+
+            const openDrawer = () => {
+                if (drawer && backdrop) {
+                    drawer.classList.remove('-translate-x-full');
+                    backdrop.classList.remove('hidden');
+                }
+            };
+
+            const closeDrawer = () => {
+                if (drawer && backdrop) {
+                    drawer.classList.add('-translate-x-full');
+                    backdrop.classList.add('hidden');
+                }
+            };
+
+            if (openBtn) openBtn.addEventListener('click', openDrawer);
+            if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+            if (backdrop) backdrop.addEventListener('click', closeDrawer);
         });
     </script>
 </body>

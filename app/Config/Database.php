@@ -203,30 +203,31 @@ class Database extends Config
 
         // =====================================================
         // VERCEL / SUPABASE: Override koneksi default ke PostgreSQL
-        // Set environment variables berikut di Vercel Dashboard:
-        //   SUPABASE_DB_HOST, SUPABASE_DB_NAME,
-        //   SUPABASE_DB_USER, SUPABASE_DB_PASS, SUPABASE_DB_PORT
+        // Deteksi otomatis environment Vercel (VERCEL env var auto-set)
+        // atau gunakan SUPABASE_DB_HOST jika tersedia
         // =====================================================
+        $isVercel = !empty(getenv('VERCEL') ?: ($_ENV['VERCEL'] ?? ''));
         $supabaseHost = getenv('SUPABASE_DB_HOST') ?: ($_ENV['SUPABASE_DB_HOST'] ?? '');
-        if (!empty($supabaseHost)) {
+
+        if ($isVercel || !empty($supabaseHost)) {
             $this->default = [
                 'DSN'          => '',
-                'hostname'     => $supabaseHost,
+                'hostname'     => !empty($supabaseHost) ? $supabaseHost : 'db.splspwbteapwnwaczxme.supabase.co',
                 'username'     => getenv('SUPABASE_DB_USER') ?: ($_ENV['SUPABASE_DB_USER'] ?? 'postgres'),
-                'password'     => getenv('SUPABASE_DB_PASS') ?: ($_ENV['SUPABASE_DB_PASS'] ?? ''),
+                'password'     => getenv('SUPABASE_DB_PASS') ?: ($_ENV['SUPABASE_DB_PASS'] ?? '_6wuhahPzp_AF#w'),
                 'database'     => getenv('SUPABASE_DB_NAME') ?: ($_ENV['SUPABASE_DB_NAME'] ?? 'postgres'),
                 'schema'       => 'public',
                 'DBDriver'     => 'Postgre',
                 'DBPrefix'     => '',
                 'pConnect'     => false,
-                'DBDebug'      => (ENVIRONMENT !== 'production'),
+                'DBDebug'      => false,
                 'charset'      => 'utf8',
                 'swapPre'      => '',
                 'encrypt'      => [
                     'enable' => true,
                 ],
                 'failover'     => [],
-                'port'         => (int)(getenv('SUPABASE_DB_PORT') ?: ($_ENV['SUPABASE_DB_PORT'] ?? 6543)),
+                'port'         => (int)(getenv('SUPABASE_DB_PORT') ?: ($_ENV['SUPABASE_DB_PORT'] ?? 5432)),
                 'dateFormat'   => [
                     'date'     => 'Y-m-d',
                     'datetime' => 'Y-m-d H:i:s',

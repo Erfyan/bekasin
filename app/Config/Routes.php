@@ -10,6 +10,7 @@ use CodeIgniter\Router\RouteCollection;
 // 1. RUTE PUBLIK (Dapat diakses siapa saja)
 // ==========================================
 $routes->get('/', 'Home::index');
+$routes->get('/diagnostic', 'Diagnostic::index'); // TEMPORARY - remove after debug
 $routes->get('/products', 'Product::index');
 $routes->get('/products/(:segment)', 'Product::show/$1');
 $routes->get('/categories', 'Home::categories');

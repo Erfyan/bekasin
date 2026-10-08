@@ -200,5 +200,39 @@ class Database extends Config
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
         }
+
+        // =====================================================
+        // VERCEL / SUPABASE: Override koneksi default ke PostgreSQL
+        // Set environment variables berikut di Vercel Dashboard:
+        //   SUPABASE_DB_HOST, SUPABASE_DB_NAME,
+        //   SUPABASE_DB_USER, SUPABASE_DB_PASS, SUPABASE_DB_PORT
+        // =====================================================
+        $supabaseHost = getenv('SUPABASE_DB_HOST') ?: ($_ENV['SUPABASE_DB_HOST'] ?? '');
+        if (!empty($supabaseHost)) {
+            $this->default = [
+                'DSN'          => '',
+                'hostname'     => $supabaseHost,
+                'username'     => getenv('SUPABASE_DB_USER') ?: ($_ENV['SUPABASE_DB_USER'] ?? 'postgres'),
+                'password'     => getenv('SUPABASE_DB_PASS') ?: ($_ENV['SUPABASE_DB_PASS'] ?? ''),
+                'database'     => getenv('SUPABASE_DB_NAME') ?: ($_ENV['SUPABASE_DB_NAME'] ?? 'postgres'),
+                'schema'       => 'public',
+                'DBDriver'     => 'Postgre',
+                'DBPrefix'     => '',
+                'pConnect'     => false,
+                'DBDebug'      => (ENVIRONMENT !== 'production'),
+                'charset'      => 'utf8',
+                'swapPre'      => '',
+                'encrypt'      => [
+                    'enable' => true,
+                ],
+                'failover'     => [],
+                'port'         => (int)(getenv('SUPABASE_DB_PORT') ?: ($_ENV['SUPABASE_DB_PORT'] ?? 6543)),
+                'dateFormat'   => [
+                    'date'     => 'Y-m-d',
+                    'datetime' => 'Y-m-d H:i:s',
+                    'time'     => 'H:i:s',
+                ],
+            ];
+        }
     }
 }

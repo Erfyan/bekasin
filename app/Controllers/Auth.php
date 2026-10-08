@@ -37,23 +37,28 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('error', 'Silakan isi email/username dan password.');
         }
 
-        $identifier = $this->request->getPost('identifier');
-        $password = $this->request->getPost('password');
+        try {
+            $identifier = $this->request->getPost('identifier');
+            $password = $this->request->getPost('password');
 
-        $result = $this->authService->attemptLogin($identifier, $password);
+            $result = $this->authService->attemptLogin($identifier, $password);
 
-        if (!$result['success']) {
-            return redirect()->back()->withInput()->with('error', $result['message']);
+            if (!$result['success']) {
+                return redirect()->back()->withInput()->with('error', $result['message']);
+            }
+
+            session()->setFlashdata('success', 'Selamat datang kembali, ' . esc($result['user']['full_name']) . '!');
+
+            // Redirect admin ke admin panel, user ke dashboard/beranda
+            if ($result['user']['role'] === 'admin') {
+                return redirect()->to(base_url('admin'));
+            }
+
+            return redirect()->to(base_url('/'));
+        } catch (\Exception $e) {
+            log_message('error', 'Login error: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan sistem saat login. Silakan coba lagi nanti.');
         }
-
-        session()->setFlashdata('success', 'Selamat datang kembali, ' . esc($result['user']['full_name']) . '!');
-
-        // Redirect admin ke admin panel, user ke dashboard/beranda
-        if ($result['user']['role'] === 'admin') {
-            return redirect()->to(base_url('admin'));
-        }
-
-        return redirect()->to(base_url('/'));
     }
 
     /**
@@ -98,14 +103,19 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('error', implode('<br>', $this->validator->getErrors()));
         }
 
-        $result = $this->authService->register($this->request->getPost());
+        try {
+            $result = $this->authService->register($this->request->getPost());
 
-        if (!$result['success']) {
-            return redirect()->back()->withInput()->with('error', 'Pendaftaran gagal. Silakan periksa kembali data Anda.');
+            if (!$result['success']) {
+                return redirect()->back()->withInput()->with('error', 'Pendaftaran gagal. Silakan periksa kembali data Anda.');
+            }
+
+            session()->setFlashdata('success', 'Akun Anda berhasil didaftarkan! Silakan masuk.');
+            return redirect()->to(base_url('login'));
+        } catch (\Exception $e) {
+            log_message('error', 'Register error: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan sistem saat pendaftaran. Silakan coba lagi nanti.');
         }
-
-        session()->setFlashdata('success', 'Akun Anda berhasil didaftarkan! Silakan masuk.');
-        return redirect()->to(base_url('login'));
     }
 
     /**

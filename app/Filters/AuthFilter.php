@@ -19,7 +19,7 @@ class AuthFilter implements FilterInterface
             }
 
             session()->setFlashdata('error', 'Silakan masuk ke akun Anda untuk mengakses halaman tersebut.');
-            return redirect()->to(base_url('masuk'));
+            return redirect()->to(base_url('login'));
         }
     }
 

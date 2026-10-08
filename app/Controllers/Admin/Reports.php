@@ -19,15 +19,23 @@ class Reports extends BaseController
 
     public function index(): string
     {
-        $reports = $this->reportModel->select('reports.*, users.full_name as reporter_name')
-            ->join('users', 'users.id = reports.reporter_id')
-            ->orderBy('reports.created_at', 'DESC')
-            ->paginate(20);
+        $reports = [];
+        $pager = null;
+
+        try {
+            $reports = $this->reportModel->select('reports.*, users.full_name as reporter_name')
+                ->join('users', 'users.id = reports.reporter_id')
+                ->orderBy('reports.created_at', 'DESC')
+                ->paginate(20);
+            $pager = $this->reportModel->pager;
+        } catch (\Throwable $e) {
+            log_message('error', 'Admin reports error: ' . $e->getMessage());
+        }
 
         $data = [
             'title'   => 'Laporan Pelanggaran — Admin Panel',
             'reports' => $reports,
-            'pager'   => $this->reportModel->pager,
+            'pager'   => $pager,
         ];
 
         return view('admin/reports/index', $data);

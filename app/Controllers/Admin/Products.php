@@ -21,25 +21,32 @@ class Products extends BaseController
     {
         $search = $this->request->getGet('q');
         $status = $this->request->getGet('status');
+        $products = [];
+        $pager = null;
 
-        $builder = $this->productModel->select('products.*, users.full_name as seller_name, categories.name as category_name')
-            ->join('users', 'users.id = products.user_id')
-            ->join('categories', 'categories.id = products.category_id');
+        try {
+            $builder = $this->productModel->select('products.*, users.full_name as seller_name, categories.name as category_name')
+                ->join('users', 'users.id = products.user_id')
+                ->join('categories', 'categories.id = products.category_id');
 
-        if (!empty($search)) {
-            $builder->like('products.title', $search);
+            if (!empty($search)) {
+                $builder->like('products.title', $search);
+            }
+
+            if (!empty($status) && $status !== 'all') {
+                $builder->where('products.status', $status);
+            }
+
+            $products = $builder->orderBy('products.created_at', 'DESC')->paginate(20);
+            $pager = $this->productModel->pager;
+        } catch (\Throwable $e) {
+            log_message('error', 'Admin products index error: ' . $e->getMessage());
         }
-
-        if (!empty($status) && $status !== 'all') {
-            $builder->where('products.status', $status);
-        }
-
-        $products = $builder->orderBy('products.created_at', 'DESC')->paginate(20);
 
         $data = [
             'title'    => 'Moderasi Iklan Barang — Admin Panel',
             'products' => $products,
-            'pager'    => $this->productModel->pager,
+            'pager'    => $pager,
             'search'   => $search,
             'status'   => $status ?? 'all',
         ];

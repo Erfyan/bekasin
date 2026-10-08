@@ -12,25 +12,37 @@ class Dashboard extends BaseController
 {
     public function index(): string
     {
-        $userModel = new UserModel();
-        $productModel = new ProductModel();
-        $transactionModel = new TransactionModel();
-        $reportModel = new ReportModel();
+        $totalUsers = 0;
+        $totalProducts = 0;
+        $activeProducts = 0;
+        $totalTransactions = 0;
+        $pendingReports = 0;
+        $recentTransactions = [];
+        $recentUsers = [];
 
-        $totalUsers = $userModel->countAllResults();
-        $totalProducts = $productModel->countAllResults();
-        $activeProducts = $productModel->where('status', 'active')->countAllResults();
-        $totalTransactions = $transactionModel->countAllResults();
-        $pendingReports = $reportModel->where('status', 'pending')->countAllResults();
+        try {
+            $userModel = new UserModel();
+            $productModel = new ProductModel();
+            $transactionModel = new TransactionModel();
+            $reportModel = new ReportModel();
 
-        $recentTransactions = $transactionModel->select('transactions.*, products.title as product_title, buyer.full_name as buyer_name, seller.full_name as seller_name')
-            ->join('products', 'products.id = transactions.product_id')
-            ->join('users as buyer', 'buyer.id = transactions.buyer_id')
-            ->join('users as seller', 'seller.id = transactions.seller_id')
-            ->orderBy('transactions.created_at', 'DESC')
-            ->findAll(6);
+            $totalUsers = $userModel->countAllResults();
+            $totalProducts = $productModel->countAllResults();
+            $activeProducts = $productModel->where('status', 'active')->countAllResults();
+            $totalTransactions = $transactionModel->countAllResults();
+            $pendingReports = $reportModel->where('status', 'pending')->countAllResults();
 
-        $recentUsers = $userModel->orderBy('created_at', 'DESC')->findAll(6);
+            $recentTransactions = $transactionModel->select('transactions.*, products.title as product_title, buyer.full_name as buyer_name, seller.full_name as seller_name')
+                ->join('products', 'products.id = transactions.product_id')
+                ->join('users as buyer', 'buyer.id = transactions.buyer_id')
+                ->join('users as seller', 'seller.id = transactions.seller_id')
+                ->orderBy('transactions.created_at', 'DESC')
+                ->findAll(6);
+
+            $recentUsers = $userModel->orderBy('created_at', 'DESC')->findAll(6);
+        } catch (\Throwable $e) {
+            log_message('error', 'Admin dashboard database error: ' . $e->getMessage());
+        }
 
         $data = [
             'title'              => 'Admin Panel Dashboard — Bekasin-Aja',

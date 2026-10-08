@@ -19,7 +19,12 @@ class Categories extends BaseController
 
     public function index(): string
     {
-        $categories = $this->categoryModel->orderBy('sort_order', 'ASC')->findAll();
+        $categories = [];
+        try {
+            $categories = $this->categoryModel->orderBy('sort_order', 'ASC')->findAll();
+        } catch (\Throwable $e) {
+            log_message('error', 'Admin categories error: ' . $e->getMessage());
+        }
 
         $data = [
             'title'      => 'Kelola Kategori — Admin Panel',

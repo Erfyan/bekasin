@@ -20,22 +20,30 @@ class Users extends BaseController
     public function index(): string
     {
         $search = $this->request->getGet('q');
-        $builder = $this->userModel;
+        $users = [];
+        $pager = null;
 
-        if (!empty($search)) {
-            $builder = $builder->groupStart()
-                ->like('full_name', $search)
-                ->orLike('email', $search)
-                ->orLike('username', $search)
-                ->groupEnd();
+        try {
+            $builder = $this->userModel;
+
+            if (!empty($search)) {
+                $builder = $builder->groupStart()
+                    ->like('full_name', $search)
+                    ->orLike('email', $search)
+                    ->orLike('username', $search)
+                    ->groupEnd();
+            }
+
+            $users = $builder->orderBy('created_at', 'DESC')->paginate(20);
+            $pager = $this->userModel->pager;
+        } catch (\Throwable $e) {
+            log_message('error', 'Admin users index error: ' . $e->getMessage());
         }
-
-        $users = $builder->orderBy('created_at', 'DESC')->paginate(20);
 
         $data = [
             'title' => 'Kelola Pengguna — Admin Panel Bekasin-Aja',
             'users' => $users,
-            'pager' => $this->userModel->pager,
+            'pager' => $pager,
             'search' => $search,
         ];
 

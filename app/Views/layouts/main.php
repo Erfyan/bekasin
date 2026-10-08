@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-800 flex flex-col" style="font-family: 'Inter', sans-serif;">

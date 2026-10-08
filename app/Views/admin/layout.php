@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="flex min-h-full font-sans antialiased text-slate-100 selection:bg-emerald-500 selection:text-white bg-slate-950">

@@ -55,9 +55,9 @@ class Auth extends BaseController
             }
 
             return redirect()->to(base_url('/'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             log_message('error', 'Login error: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan sistem saat login. Silakan coba lagi nanti.');
+            return redirect()->back()->withInput()->with('error', 'Login gagal: ' . $e->getMessage());
         }
     }
 
@@ -112,9 +112,9 @@ class Auth extends BaseController
 
             session()->setFlashdata('success', 'Akun Anda berhasil didaftarkan! Silakan masuk.');
             return redirect()->to(base_url('login'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             log_message('error', 'Register error: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan sistem saat pendaftaran. Silakan coba lagi nanti.');
+            return redirect()->back()->withInput()->with('error', 'Pendaftaran gagal: ' . $e->getMessage());
         }
     }
 

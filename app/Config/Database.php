@@ -203,16 +203,25 @@ class Database extends Config
 
         // =====================================================
         // VERCEL / SUPABASE: Override koneksi default ke PostgreSQL
-        // Deteksi otomatis environment Vercel (VERCEL env var auto-set)
-        // atau gunakan SUPABASE_DB_HOST jika tersedia
+        // Deteksi komprehensif environment Vercel & cloud hosting
         // =====================================================
-        $isVercel = !empty(getenv('VERCEL') ?: ($_ENV['VERCEL'] ?? ''));
-        $supabaseHost = getenv('SUPABASE_DB_HOST') ?: ($_ENV['SUPABASE_DB_HOST'] ?? '');
+        $isVercel = !empty(getenv('VERCEL'))
+            || !empty($_ENV['VERCEL'])
+            || !empty($_SERVER['VERCEL'])
+            || !empty($_SERVER['VERCEL_ENV'])
+            || !empty($_SERVER['LAMBDA_TASK_ROOT'])
+            || !empty($_SERVER['AWS_LAMBDA_FUNCTION_NAME'])
+            || (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'vercel.app'))
+            || (isset($_SERVER['SERVER_NAME']) && str_contains($_SERVER['SERVER_NAME'], 'vercel.app'))
+            || !empty(getenv('SUPABASE_DB_HOST'))
+            || !empty($_ENV['SUPABASE_DB_HOST']);
 
-        if ($isVercel || !empty($supabaseHost)) {
+        if ($isVercel) {
+            $supabaseHost = getenv('SUPABASE_DB_HOST') ?: ($_ENV['SUPABASE_DB_HOST'] ?? 'db.splspwbteapwnwaczxme.supabase.co');
+
             $this->default = [
                 'DSN'          => '',
-                'hostname'     => !empty($supabaseHost) ? $supabaseHost : 'db.splspwbteapwnwaczxme.supabase.co',
+                'hostname'     => $supabaseHost,
                 'username'     => getenv('SUPABASE_DB_USER') ?: ($_ENV['SUPABASE_DB_USER'] ?? 'postgres'),
                 'password'     => getenv('SUPABASE_DB_PASS') ?: ($_ENV['SUPABASE_DB_PASS'] ?? '_6wuhahPzp_AF#w'),
                 'database'     => getenv('SUPABASE_DB_NAME') ?: ($_ENV['SUPABASE_DB_NAME'] ?? 'postgres'),
@@ -223,6 +232,7 @@ class Database extends Config
                 'DBDebug'      => false,
                 'charset'      => 'utf8',
                 'swapPre'      => '',
+                'sslmode'      => 'require',
                 'encrypt'      => [
                     'enable' => true,
                 ],

@@ -217,12 +217,12 @@ class Database extends Config
             || !empty($_ENV['SUPABASE_DB_HOST']);
 
         if ($isVercel) {
-            $supabaseHost = getenv('SUPABASE_DB_HOST') ?: ($_ENV['SUPABASE_DB_HOST'] ?? 'db.splspwbteapwnwaczxme.supabase.co');
+            $supabaseHost = getenv('SUPABASE_DB_HOST') ?: ($_ENV['SUPABASE_DB_HOST'] ?? 'aws-0-ap-southeast-2.pooler.supabase.com');
 
             $this->default = [
                 'DSN'          => '',
                 'hostname'     => $supabaseHost,
-                'username'     => getenv('SUPABASE_DB_USER') ?: ($_ENV['SUPABASE_DB_USER'] ?? 'postgres'),
+                'username'     => getenv('SUPABASE_DB_USER') ?: ($_ENV['SUPABASE_DB_USER'] ?? 'postgres.splspwbteapwnwaczxme'),
                 'password'     => getenv('SUPABASE_DB_PASS') ?: ($_ENV['SUPABASE_DB_PASS'] ?? '_6wuhahPzp_AF#w'),
                 'database'     => getenv('SUPABASE_DB_NAME') ?: ($_ENV['SUPABASE_DB_NAME'] ?? 'postgres'),
                 'schema'       => 'public',
@@ -237,7 +237,7 @@ class Database extends Config
                     'enable' => true,
                 ],
                 'failover'     => [],
-                'port'         => (int)(getenv('SUPABASE_DB_PORT') ?: ($_ENV['SUPABASE_DB_PORT'] ?? 5432)),
+                'port'         => (int)(getenv('SUPABASE_DB_PORT') ?: ($_ENV['SUPABASE_DB_PORT'] ?? 6543)),
                 'dateFormat'   => [
                     'date'     => 'Y-m-d',
                     'datetime' => 'Y-m-d H:i:s',

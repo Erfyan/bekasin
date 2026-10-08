@@ -12,13 +12,12 @@ class Supabase extends BaseConfig
     public string $url = '';
 
     /**
-     * Supabase Anon Public Key (Safe for client, if needed)
+     * Supabase Keys & Options
      */
+    public string $publishableKey = '';
+    public string $secretKey = '';
+    public string $jwksUrl = '';
     public string $anonKey = '';
-
-    /**
-     * Supabase Service Role Key (SERVER-SIDE ONLY, NEVER EXPOSE TO FRONTEND)
-     */
     public string $serviceKey = '';
 
     /**
@@ -32,9 +31,15 @@ class Supabase extends BaseConfig
     {
         parent::__construct();
 
-        $this->url = env('SUPABASE_URL', 'https://your-project-ref.supabase.co');
-        $this->anonKey = env('SUPABASE_ANON_KEY', '');
-        $this->serviceKey = env('SUPABASE_SERVICE_KEY', '');
+        $this->url = env('SUPABASE_URL', 'https://splspwbteapwnwaczxme.supabase.co');
+        $this->publishableKey = env('SUPABASE_PUBLISHABLE_KEY', 'sb_publishable_OnWN8ytImmo1VmXepf4fog_YTJjyfQu');
+        $this->secretKey = env('SUPABASE_SECRET_KEY', '');
+        $this->jwksUrl = env('SUPABASE_JWKS_URL', 'https://splspwbteapwnwaczxme.supabase.co/auth/v1/.well-known/jwks.json');
+
+        // Fallbacks
+        $this->anonKey = env('SUPABASE_ANON_KEY', $this->publishableKey);
+        $this->serviceKey = env('SUPABASE_SERVICE_KEY', $this->secretKey);
+
         $this->bucketProducts = env('SUPABASE_STORAGE_BUCKET_PRODUCTS', 'product-images');
         $this->bucketAvatars = env('SUPABASE_STORAGE_BUCKET_AVATARS', 'avatars');
         $this->bucketTransactions = env('SUPABASE_STORAGE_BUCKET_TRANSACTIONS', 'transaction-proofs');

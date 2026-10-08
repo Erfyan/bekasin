@@ -66,6 +66,8 @@ class ProductService
                 'city'               => trim($data['city']),
                 'meetup_location'    => $data['meetup_location'] ?? null,
                 'views_count'        => 0,
+                'created_at'         => date('Y-m-d H:i:s'),
+                'updated_at'         => date('Y-m-d H:i:s'),
             ];
 
             $productId = $this->productModel->insert($productData, true);

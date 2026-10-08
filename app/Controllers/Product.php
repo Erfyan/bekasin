@@ -141,7 +141,7 @@ class Product extends BaseController
             $builder->where('products.status', $status);
         }
 
-        $products = $builder->orderBy('products.created_at', 'DESC')->findAll();
+        $products = $builder->orderBy('products.created_at', 'DESC')->orderBy('products.id', 'DESC')->findAll();
 
         $data = [
             'title'         => 'Kelola Barang Jualan Saya — Bekasin-Aja',

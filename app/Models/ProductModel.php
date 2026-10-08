@@ -31,6 +31,8 @@ class ProductModel extends Model
         'city',
         'meetup_location',
         'views_count',
+        'created_at',
+        'updated_at',
     ];
 
     protected $useTimestamps = true;
@@ -127,7 +129,7 @@ class ProductModel extends Model
                 break;
             case 'latest':
             default:
-                $builder->orderBy('products.created_at', 'DESC');
+                $builder->orderBy('products.created_at', 'DESC')->orderBy('products.id', 'DESC');
                 break;
         }
 

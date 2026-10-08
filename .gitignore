@@ -36,6 +36,8 @@ composer.lock
 /writable/uploads/*
 !/writable/uploads/index.html
 !/writable/uploads/.gitkeep
+/public/null/
+ci_bekasin_session*
 
 #--------------------------------------------------------------------
 # Node.js & Frontend Assets

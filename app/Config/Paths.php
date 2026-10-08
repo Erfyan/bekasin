@@ -65,7 +65,6 @@ class Paths
     public string $testsDirectory = __DIR__ . '/../../tests';
 
     /**
-     * ---------------------------------------------------------------
      * VIEW DIRECTORY NAME
      * ---------------------------------------------------------------
      *
@@ -75,4 +74,21 @@ class Paths
      * is used when no value is provided to `Services::renderer()`.
      */
     public string $viewDirectory = __DIR__ . '/../Views';
+
+    public function __construct()
+    {
+        // Support Vercel serverless read-only filesystem by redirecting writable path to /tmp
+        if (getenv('VERCEL') || isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
+            $tmpWritable = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'ci4_writable';
+            if (!is_dir($tmpWritable)) {
+                @mkdir($tmpWritable, 0777, true);
+                @mkdir($tmpWritable . DIRECTORY_SEPARATOR . 'cache', 0777, true);
+                @mkdir($tmpWritable . DIRECTORY_SEPARATOR . 'logs', 0777, true);
+                @mkdir($tmpWritable . DIRECTORY_SEPARATOR . 'session', 0777, true);
+                @mkdir($tmpWritable . DIRECTORY_SEPARATOR . 'uploads', 0777, true);
+                @mkdir($tmpWritable . DIRECTORY_SEPARATOR . 'debugbar', 0777, true);
+            }
+            $this->writableDirectory = $tmpWritable;
+        }
+    }
 }

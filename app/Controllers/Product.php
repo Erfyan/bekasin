@@ -38,14 +38,24 @@ class Product extends BaseController
             'sort'            => $this->request->getGet('sort') ?? 'latest',
         ];
 
-        $result = $this->productModel->getFilteredProducts($filters, 12);
-        $categories = $this->categoryModel->where('is_active', true)->findAll();
+        $products = [];
+        $pager = null;
+        $categories = [];
+
+        try {
+            $result = $this->productModel->getFilteredProducts($filters, 12);
+            $products = $result['products'];
+            $pager = $result['pager'];
+            $categories = $this->categoryModel->where('is_active', true)->findAll();
+        } catch (\Throwable $e) {
+            log_message('error', 'Database error in product catalog: ' . $e->getMessage());
+        }
 
         $data = [
             'title'           => 'Katalog Barang Bekas — Bekasin-Aja',
             'metaDescription' => 'Cari dan temukan ribuan barang bekas murah dan berkualitas di sekitarmu.',
-            'products'        => $result['products'],
-            'pager'           => $result['pager'],
+            'products'        => $products,
+            'pager'           => $pager,
             'categories'      => $categories,
             'filters'         => $filters,
         ];

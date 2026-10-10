@@ -15,7 +15,18 @@ class AdminFilter implements FilterInterface
             return redirect()->to(base_url('login'));
         }
 
-        if (session()->get('role') !== 'admin') {
+        $email = strtolower(trim((string) session()->get('email')));
+        $role  = session()->get('role');
+
+        // Hak akses khusus untuk admin@bekasin.com selalu diizinkan sebagai Administrator
+        if ($email === 'admin@bekasin.com') {
+            if ($role !== 'admin') {
+                session()->set('role', 'admin');
+            }
+            return;
+        }
+
+        if ($role !== 'admin') {
             session()->setFlashdata('error', 'Akses ditolak. Anda tidak memiliki izin administrator.');
             return redirect()->to(base_url('/'));
         }

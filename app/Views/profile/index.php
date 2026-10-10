@@ -39,7 +39,7 @@
 
                     <!-- Actions -->
                     <div class="flex items-center gap-2.5 flex-wrap">
-                        <?php if (session()->get('role') === 'admin'): ?>
+                        <?php if (session()->get('role') === 'admin' || strtolower((string)session()->get('email')) === 'admin@bekasin.com'): ?>
                             <a href="<?= base_url('admin') ?>" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5">
                                 <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
                             </a>

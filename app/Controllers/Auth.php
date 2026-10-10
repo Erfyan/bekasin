@@ -50,7 +50,8 @@ class Auth extends BaseController
             session()->setFlashdata('success', 'Selamat datang kembali, ' . esc($result['user']['full_name']) . '!');
 
             // Redirect admin ke admin panel, user ke dashboard/beranda
-            if ($result['user']['role'] === 'admin') {
+            $userEmail = strtolower(trim((string)$result['user']['email']));
+            if ($result['user']['role'] === 'admin' || $userEmail === 'admin@bekasin.com') {
                 return redirect()->to(base_url('admin'));
             }
 

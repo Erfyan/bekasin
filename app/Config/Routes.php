@@ -91,15 +91,34 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
 // ==========================================
 $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
     $routes->get('/', 'Admin\Dashboard::index');
+
+    // Users CRUD
     $routes->get('users', 'Admin\Users::index');
+    $routes->post('users/store', 'Admin\Users::store');
+    $routes->post('users/(:num)/update', 'Admin\Users::update/$1');
     $routes->post('users/(:num)/status', 'Admin\Users::changeStatus/$1');
+    $routes->post('users/(:num)/delete', 'Admin\Users::delete/$1');
+
+    // Products CRUD & Moderation
     $routes->get('products', 'Admin\Products::index');
     $routes->post('products/(:num)/moderate', 'Admin\Products::moderate/$1');
+    $routes->post('products/(:num)/delete', 'Admin\Products::delete/$1');
+
+    // Categories CRUD
     $routes->get('categories', 'Admin\Categories::index');
     $routes->post('categories/store', 'Admin\Categories::store');
     $routes->post('categories/(:num)/update', 'Admin\Categories::update/$1');
+    $routes->post('categories/(:num)/delete', 'Admin\Categories::delete/$1');
+
+    // Reports CRUD
     $routes->get('reports', 'Admin\Reports::index');
     $routes->post('reports/(:num)/resolve', 'Admin\Reports::resolve/$1');
+    $routes->post('reports/(:num)/delete', 'Admin\Reports::delete/$1');
+
+    // Transactions CRUD & Status
     $routes->get('transactions', 'Admin\Transactions::index');
+    $routes->post('transactions/(:num)/status', 'Admin\Transactions::changeStatus/$1');
+
+    // Audit Logs
     $routes->get('audit-logs', 'Admin\Settings::auditLogs');
 });

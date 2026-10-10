@@ -18,6 +18,7 @@ class CategoryModel extends Model
         'icon',
         'image_url',
         'description',
+        'sort_order',
         'is_active',
     ];
 

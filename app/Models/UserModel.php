@@ -50,13 +50,18 @@ class UserModel extends Model
     ];
 
     /**
-     * Find by username or email
+     * Find by username or email (case-insensitive for PostgreSQL & MySQL)
      */
     public function findByCredentials(string $identifier)
     {
+        $clean = trim($identifier);
+        $cleanLower = strtolower($clean);
+
         return $this->groupStart()
-            ->where('email', $identifier)
-            ->orWhere('username', $identifier)
+            ->where('LOWER(email)', $cleanLower)
+            ->orWhere('LOWER(username)', $cleanLower)
+            ->orWhere('email', $clean)
+            ->orWhere('username', $clean)
             ->groupEnd()
             ->first();
     }

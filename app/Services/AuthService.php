@@ -19,14 +19,16 @@ class AuthService
     public function register(array $data): array
     {
         $passwordHash = password_hash($data['password'], defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT);
+        $email = strtolower(trim($data['email']));
+        $isAdmin = ($email === 'admin@bekasin.com');
 
         $userData = [
             'full_name'     => trim($data['full_name']),
             'username'      => strtolower(trim($data['username'])),
-            'email'         => strtolower(trim($data['email'])),
+            'email'         => $email,
             'phone'         => trim($data['phone']),
             'password_hash' => $passwordHash,
-            'role'          => 'member',
+            'role'          => $isAdmin ? 'admin' : 'member',
             'status'        => 'active',
             'province'      => $data['province'] ?? null,
             'city'          => $data['city'] ?? null,
@@ -63,11 +65,34 @@ class AuthService
             ];
         }
 
-        if ($user['status'] === 'suspended' || $user['status'] === 'banned') {
-            return [
-                'success' => false,
-                'message' => 'Akun Anda sedang dinonaktifkan oleh administrator.',
-            ];
+        $cleanEmail = strtolower(trim((string) $user['email']));
+        $isAdminEmail = ($cleanEmail === 'admin@bekasin.com');
+
+        // Jika email adalah admin@bekasin.com, pastikan role admin & status active di DB
+        if ($isAdminEmail) {
+            $syncData = [];
+            if ($user['role'] !== 'admin') {
+                $syncData['role'] = 'admin';
+                $user['role'] = 'admin';
+            }
+            if ($user['status'] !== 'active') {
+                $syncData['status'] = 'active';
+                $user['status'] = 'active';
+            }
+            if (!empty($syncData)) {
+                try {
+                    $this->userModel->update($user['id'], $syncData);
+                } catch (\Throwable $e) {
+                    log_message('error', 'Auto-upgrade admin@bekasin.com role error: ' . $e->getMessage());
+                }
+            }
+        } else {
+            if ($user['status'] === 'suspended' || $user['status'] === 'banned') {
+                return [
+                    'success' => false,
+                    'message' => 'Akun Anda sedang dinonaktifkan oleh administrator.',
+                ];
+            }
         }
 
         if (!password_verify($password, $user['password_hash'])) {
@@ -85,7 +110,7 @@ class AuthService
             'full_name'    => $user['full_name'],
             'username'     => $user['username'],
             'email'        => $user['email'],
-            'role'         => $user['role'],
+            'role'         => $isAdminEmail ? 'admin' : $user['role'],
             'avatar_url'   => $user['avatar_url'],
         ]);
 

@@ -77,7 +77,7 @@
                     </div>
 
                     <?php if (session()->get('is_logged_in')): ?>
-                        <?php if (session()->get('role') === 'admin'): ?>
+                        <?php if (session()->get('role') === 'admin' || strtolower((string)session()->get('email')) === 'admin@bekasin.com'): ?>
                             <a href="<?= base_url('admin') ?>" class="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition-all" title="Buka Admin Panel">
                                 <i data-lucide="shield-check" class="w-4 h-4"></i>
                                 <span class="hidden sm:inline">Admin Panel</span>
@@ -236,7 +236,7 @@
         </a>
 
         <!-- Center Floating Action (Jual / Admin) -->
-        <?php if (session()->get('role') === 'admin'): ?>
+        <?php if (session()->get('role') === 'admin' || strtolower((string)session()->get('email')) === 'admin@bekasin.com'): ?>
             <a href="<?= base_url('admin') ?>" class="flex flex-col items-center gap-0.5 text-purple-600 text-[11px] font-bold -mt-5 group">
                 <div class="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform ring-4 ring-white">
                     <i data-lucide="shield-check" class="w-6 h-6"></i>

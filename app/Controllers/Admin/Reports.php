@@ -23,7 +23,7 @@ class Reports extends BaseController
         $pager = null;
 
         try {
-            $reports = $this->reportModel->select('reports.*, users.full_name as reporter_name')
+            $reports = $this->reportModel->select('reports.*, users.full_name as reporter_name, users.username as reporter_username')
                 ->join('users', 'users.id = reports.reporter_id')
                 ->orderBy('reports.created_at', 'DESC')
                 ->paginate(20);
@@ -47,14 +47,40 @@ class Reports extends BaseController
         $status = $this->request->getPost('status'); // resolved, dismissed
         $adminNotes = $this->request->getPost('admin_notes');
 
-        $this->reportModel->update($id, [
-            'status'      => $status,
-            'admin_notes' => $adminNotes,
-        ]);
+        try {
+            $this->reportModel->update($id, [
+                'status'      => $status,
+                'admin_notes' => $adminNotes,
+            ]);
 
-        $this->moderationService->logAdminAction($adminId, 'resolve_report', 'report', $id, ['status' => $status]);
+            $this->moderationService->logAdminAction($adminId, 'resolve_report', 'report', $id, ['status' => $status]);
+            session()->setFlashdata('success', 'Status laporan aduan berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            log_message('error', 'Admin resolve report error: ' . $e->getMessage());
+            session()->setFlashdata('error', 'Gagal memperbarui laporan: ' . $e->getMessage());
+        }
 
-        session()->setFlashdata('success', 'Laporan aduan telah diselesaikan.');
+        return redirect()->to(base_url('admin/reports'));
+    }
+
+    public function delete(int $id)
+    {
+        $adminId = (int) session()->get('user_id');
+        $report = $this->reportModel->find($id);
+
+        if (!$report) {
+            return redirect()->back()->with('error', 'Laporan tidak ditemukan.');
+        }
+
+        try {
+            $this->reportModel->delete($id);
+            $this->moderationService->logAdminAction($adminId, 'delete_report', 'report', $id, ['reason' => $report['reason']]);
+            session()->setFlashdata('success', 'Laporan aduan berhasil dihapus.');
+        } catch (\Throwable $e) {
+            log_message('error', 'Admin delete report error: ' . $e->getMessage());
+            session()->setFlashdata('error', 'Gagal menghapus laporan: ' . $e->getMessage());
+        }
+
         return redirect()->to(base_url('admin/reports'));
     }
 }
